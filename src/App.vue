@@ -8,6 +8,7 @@
       :currentQuestion="questions[index]"
       :next="next"
       :increment="increment"
+      :checkAttempt="checkAttempt"
     />
   </div>
 </template>
@@ -43,12 +44,18 @@ export default {
   methods: {
     next() {
       this.index++;
+      this.checkAttempt();
     },
     increment(isCorrect) {
       if (isCorrect) {
         this.numCorrect++;
       }
       this.numTotal++;
+    },
+    checkAttempt() {
+      if(this.numTotal === 10) {
+        alert("QUIZ COMPLETED \n\n Your Score: "+ this.numCorrect);
+      }
     }
   }
 }

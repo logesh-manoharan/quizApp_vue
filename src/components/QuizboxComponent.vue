@@ -1,8 +1,6 @@
 <template>
     <div>
-        <b-jumbotron header="Questions">
-            <hr>
-            <hr>
+        <b-jumbotron>
             <h4>{{currentQuestion.question}} </h4>
             <hr>
 
@@ -10,7 +8,7 @@
                 <b-list-group-item @click="selectAnswer(index)" 
                 :class="[!answered && selectedIndex === index ? 'selectedAnswer' : '',
                          answered && correctIndex === index ? 'correctAnswer': '',
-                         answered && correctIndex != index && selectedIndex === index ? 'wrongAnswer' : '']" 
+                         answered && selectedIndex === index && correctIndex !== index  ? 'wrongAnswer' : '']" 
                 v-for="(answer, index) in shuffledAnswers" :key="index">
                     {{answer}}
                 </b-list-group-item>
@@ -29,14 +27,15 @@ export default {
     props: {
         currentQuestion: Object,
         next: Function,
-        selectedIndex: null,
-        increment: Function
+        increment: Function,
+        checkAttempt: Function
     },
     data() {
         return {
             correctIndex: null,
             shuffledAnswers: [],
-            answered: false
+            answered: false,
+            selectedIndex: null
         }
     },
     //continously monitoring for each question [so, if we move on to next question this will execute]
@@ -80,6 +79,7 @@ export default {
             }
             this.answered = true;
             this.increment(isCorrect);
+            this.checkAttempt();
         }
     }
 }
